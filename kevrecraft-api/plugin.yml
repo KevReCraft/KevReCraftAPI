@@ -1,0 +1,26 @@
+ name: KevReCraftAPI
+ version: 1.0.0
+ description: This is the official Plugin API for KevReCraft
+ author: KevReTV
+ api-version: 1.15
+ 
+ main: de.kevrecraft.KevReCraftAPI
+ 
+ commands:
+   help:
+     description: Shows you all about API Commands.
+     permission: help.default
+     usage: Syntax error! Simply type /&lt;command&gt; to show Help.
+ 
+ permissions:
+   help.*:
+     description: Gives access to all help commands
+     children:
+       help.default: true
+       money.add: true
+   help.default:
+     description: Show all default Commands
+     default: false
+   help.admin:
+     description: Show all Admin Commands
+     default: false
