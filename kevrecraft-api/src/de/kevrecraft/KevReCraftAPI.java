@@ -5,28 +5,23 @@ import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class KevReCraftAPI extends JavaPlugin {
+	
+	private static KevReCraftAPI instance = null;
+	
+	public static KevReCraftAPI getInstance() {
+		return instance;
+	}
+	
 	@Override
 	public void onEnable() {
-		// TODO Auto-generated method stub
-		super.onEnable();
-		
+		instance = this;
 		registerCommands();
-		
-		Bukkit.getConsoleSender().sendMessage(ChatColor.WHITE + "[" + ChatColor.GREEN + "KevReCraftAPI" + ChatColor.WHITE + "]" + " API successfully started!");
+		Bukkit.getConsoleSender().sendMessage(ChatColor.WHITE + "[" + ChatColor.GREEN + this.getName() + ChatColor.WHITE + "]" + " successfully started!");
 	}
 	
 	@Override
 	public void onDisable() {
-		// TODO Auto-generated method stub
-		super.onDisable();
-		
-		Bukkit.getConsoleSender().sendMessage(ChatColor.WHITE + "[" + ChatColor.GREEN + "KevReCraftAPI" + ChatColor.WHITE + "]" + " API successfully terminated!");
-	}
-	
-	@Override
-	public void onLoad() {
-		// TODO Auto-generated method stub
-		super.onLoad();
+		Bukkit.getConsoleSender().sendMessage(ChatColor.WHITE + "[" + ChatColor.GREEN + this.getName() + ChatColor.WHITE + "]" + " successfully terminated!");
 	}
 	
 	// Hier sind alle zu registrierenden Kommandos eingetragen
