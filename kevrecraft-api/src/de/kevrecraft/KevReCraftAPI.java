@@ -5,7 +5,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import de.kevrecraft.api.MySQL;
-import de.kevrecraft.api.type.MySQLType;
 
 public class KevReCraftAPI extends JavaPlugin {
 	private static KevReCraftAPI instance = null;
@@ -18,7 +17,8 @@ public class KevReCraftAPI extends JavaPlugin {
 	public void onEnable() {
 		instance = this;
 		
-		new MySQL(MySQLType.PlayerData);
+		//MySQL Verbindung aufbauen
+		MySQL.PLAYERDATA.getClass();
 		
 		registerCommands();
 		Bukkit.getConsoleSender().sendMessage(ChatColor.WHITE + "[" + ChatColor.GREEN + this.getName() + ChatColor.WHITE + "]" + " successfully started!");
@@ -26,8 +26,10 @@ public class KevReCraftAPI extends JavaPlugin {
 	
 	@Override
 	public void onDisable() {
-		for(MySQLType type : MySQLType.getTypeList()) {
-			new MySQL(type).disconnect();
+		
+		//MySQL verbindungen trennen
+		for(MySQL con : MySQL.getList()) {
+			con.disconnect();
 		}
 		Bukkit.getConsoleSender().sendMessage(ChatColor.WHITE + "[" + ChatColor.GREEN + this.getName() + ChatColor.WHITE + "]" + " successfully terminated!");
 	}
