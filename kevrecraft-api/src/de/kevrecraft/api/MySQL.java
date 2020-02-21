@@ -23,16 +23,16 @@ public enum MySQL {
 	private int id;
 	private String name;
 	
-	private static HashMap<Integer, Connection> connections;
+	private static HashMap<Integer, Connection> connections = new HashMap<Integer, Connection>();
 	
-	private static HashMap<Integer, Connection> getHashMap() {
+	private static HashMap<Integer, Connection> getConnectionsHashMap() {
 		return connections;
 	}
 	
 	MySQL(int id, String name) {
 		this.id = id;
 		this.name = name;
-		if(getHashMap().get(this.id) == null) {
+		if(true) {
 			FileWriter fw = new FileWriter("MySQLConfig");
 			if(fw.exist()) {
 				String host = fw.getString(this.name + ".host");
@@ -42,30 +42,30 @@ public enum MySQL {
 				String password = fw.getString(this.name()  + ".password");
 
 				try {
-					getHashMap().put(this.id, DriverManager.getConnection("jdbc:mysql//" + host + ":" + port + "/" + database, username, password));
+					getConnectionsHashMap().put(this.id, DriverManager.getConnection("jdbc:mysql//" + host + ":" + port + "/" + database, username, password));
 					Bukkit.getConsoleSender().sendMessage(ChatColor.WHITE + "[" + ChatColor.GREEN + KevReCraftAPI.getInstance().getName() + ChatColor.WHITE + "]" + " MySQL connected!");
 				} catch (SQLException e) {
 					e.printStackTrace();
 					
 					Bukkit.getConsoleSender().sendMessage(ChatColor.WHITE + "[" + ChatColor.RED + KevReCraftAPI.getInstance().getName() + ChatColor.WHITE + "]" + " MySQL Error!");
-					KevReCraftAPI.getInstance().getPluginLoader().disablePlugin(KevReCraftAPI.getInstance());
 				}
 			} else {
-				fw.setValue("host", "localhost");
-				fw.setValue("port", "3306");
-				fw.setValue("database", "database");
-				fw.setValue("username", "username");
-				fw.setValue("password", "password");
+				fw.setValue(this.name + ".host", "localhost");
+				fw.setValue(this.name + ".port", "3306");
+				fw.setValue(this.name + ".database", "database");
+				fw.setValue(this.name + ".username", "username");
+				fw.setValue(this.name + ".password", "password");
+				
+				fw.save();
 				
 				Bukkit.getConsoleSender().sendMessage(ChatColor.WHITE + "[" + ChatColor.RED + KevReCraftAPI.getInstance().getName() + ChatColor.WHITE + "]" + " MySQL Error! Config File not found!");
-				KevReCraftAPI.getInstance().getPluginLoader().disablePlugin(KevReCraftAPI.getInstance());
 			}
 		}
 		
 	}
 	
 	public Connection getConnection() {
-		return getHashMap().get(this.id);
+		return getConnectionsHashMap().get(this.id);
 	}
 	
 	public int getID() {
@@ -77,12 +77,15 @@ public enum MySQL {
 	}
 	
 	public boolean isConnected() {
-		return getHashMap().get(this.id) == null ? false : true;
+		return getConnectionsHashMap().get(this.id) == null ? false : true;
 	}
 	
 	public void disconnect() {
 		try {
-			getHashMap().get(this.id).close();
+			if(getConnectionsHashMap().containsKey(this.id)) {
+				getConnectionsHashMap().get(this.id).close();
+				Bukkit.getConsoleSender().sendMessage(ChatColor.WHITE + "[" + ChatColor.RED + KevReCraftAPI.getInstance().getName() + ChatColor.WHITE + "]" + " MySQL disconnected!");
+			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

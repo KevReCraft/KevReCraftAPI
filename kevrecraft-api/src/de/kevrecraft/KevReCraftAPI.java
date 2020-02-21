@@ -16,20 +16,15 @@ public class KevReCraftAPI extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		instance = this;
-		
-		//MySQL Verbindung aufbauen
-		MySQL.PLAYERDATA.getClass();
-		
 		registerCommands();
 		Bukkit.getConsoleSender().sendMessage(ChatColor.WHITE + "[" + ChatColor.GREEN + this.getName() + ChatColor.WHITE + "]" + " successfully started!");
 	}
 	
 	@Override
 	public void onDisable() {
-		
 		//MySQL verbindungen trennen
-		for(MySQL con : MySQL.getList()) {
-			con.disconnect();
+		for(int i = 0; i<MySQL.getList().length; i++) {
+			MySQL.getList()[i].disconnect();
 		}
 		Bukkit.getConsoleSender().sendMessage(ChatColor.WHITE + "[" + ChatColor.GREEN + this.getName() + ChatColor.WHITE + "]" + " successfully terminated!");
 	}
