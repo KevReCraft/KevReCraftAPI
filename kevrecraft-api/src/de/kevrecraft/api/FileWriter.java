@@ -18,6 +18,11 @@ public class FileWriter {
 		this.config = YamlConfiguration.loadConfiguration(file);
 	}
 	
+	public FileWriter(String name) {
+		this.file = new File("//plugins//KevReCraft//", name + ".yml");
+		this.config = YamlConfiguration.loadConfiguration(file);
+	}
+	
 	public FileWriter setValue(String path, Object value) {
 		this.config.set(path, value);
 		return this;

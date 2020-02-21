@@ -20,7 +20,7 @@
        money.add: true
    help.default:
      description: Show all default Commands
-     default: false
+     default: true
    help.admin:
      description: Show all Admin Commands
      default: false
