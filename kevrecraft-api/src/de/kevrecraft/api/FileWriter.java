@@ -14,12 +14,12 @@ public class FileWriter {
 	private YamlConfiguration config;
 	
 	public FileWriter(String path, String name) {
-		this.file = new File("//plugins//KevReCraft//" + path, name + ".yml");
+		this.file = new File("plugins//KevReCraft//" + path, name + ".yml");
 		this.config = YamlConfiguration.loadConfiguration(file);
 	}
 	
 	public FileWriter(String name) {
-		this.file = new File("//plugins//KevReCraft//", name + ".yml");
+		this.file = new File("plugins//KevReCraft//", name + ".yml");
 		this.config = YamlConfiguration.loadConfiguration(file);
 	}
 	
