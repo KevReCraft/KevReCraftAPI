@@ -11,11 +11,13 @@ import org.bukkit.ChatColor;
 import de.kevrecraft.KevReCraftAPI;
 
 public enum MySQL {
-	PLAYERDATA(0, "PlayerData");
+	PLAYERDATA(0, "PlayerData"),
+	PERMISSIONS(1, "Permission");
 	
 	public static MySQL[] getList() {
 		MySQL[] list = { 
-				MySQL.PLAYERDATA
+				MySQL.PLAYERDATA,
+				MySQL.PERMISSIONS
 		};
 		return list;
 	}

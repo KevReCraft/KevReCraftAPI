@@ -17,6 +17,7 @@ public class KevReCraftAPI extends JavaPlugin {
 	public void onEnable() {
 		instance = this;
 		registerCommands();
+		registerEvents();
 		Bukkit.getConsoleSender().sendMessage(ChatColor.WHITE + "[" + ChatColor.GREEN + this.getName() + ChatColor.WHITE + "]" + " successfully started!");
 	}
 	
@@ -32,5 +33,10 @@ public class KevReCraftAPI extends JavaPlugin {
 	// Hier sind alle zu registrierenden Kommandos eingetragen
 	private void registerCommands() {
 		this.getCommand("help").setExecutor(new de.kevrecraft.commands.Help());
+	}
+	
+	// Hier sind alle zu registrierenden Event Listener eingetragen
+	private void registerEvents() {
+		this.getServer().getPluginManager().registerEvents(new de.kevrecraft.api.Permissions(), this);
 	}
 }
