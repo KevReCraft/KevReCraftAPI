@@ -9,89 +9,77 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 
 import de.kevrecraft.KevReCraftAPI;
+import de.kevrecraft.api.type.MySQLType;
 
-public enum MySQL {
-	PLAYERDATA(0, "PlayerData"),
-	PERMISSIONS(1, "Permission");
+public class MySQL {
+	private MySQLType type;
 	
-	public static MySQL[] getList() {
-		MySQL[] list = { 
-				MySQL.PLAYERDATA,
-				MySQL.PERMISSIONS
-		};
-		return list;
-	}
-	
-	private int id;
-	private String name;
-	
-	private static HashMap<Integer, Connection> connections = new HashMap<Integer, Connection>();
-	
-	private static HashMap<Integer, Connection> getConnectionsHashMap() {
-		return connections;
-	}
-	
-	MySQL(int id, String name) {
-		this.id = id;
-		this.name = name;
-		if(true) {
-			FileWriter fw = new FileWriter("MySQLConfig");
-			if(fw.exist()) {
-				String host = fw.getString(this.name + ".host");
-				String port = fw.getString(this.name  + ".port");
-				String database = fw.getString(this.name()  + ".database");
-				String username = fw.getString(this.name()  + ".username");
-				String password = fw.getString(this.name()  + ".password");
-
-				try {
-					getConnectionsHashMap().put(this.id, DriverManager.getConnection("jdbc:mysql//" + host + ":" + port + "/" + database, username, password));
-					Bukkit.getConsoleSender().sendMessage(ChatColor.WHITE + "[" + ChatColor.GREEN + KevReCraftAPI.getInstance().getName() + ChatColor.WHITE + "]" + " MySQL connected!");
-				} catch (SQLException e) {
-					e.printStackTrace();
-					
-					Bukkit.getConsoleSender().sendMessage(ChatColor.WHITE + "[" + ChatColor.RED + KevReCraftAPI.getInstance().getName() + ChatColor.WHITE + "]" + " MySQL Error!");
-				}
-			} else {
-				fw.setValue(this.name + ".host", "localhost");
-				fw.setValue(this.name + ".port", "3306");
-				fw.setValue(this.name + ".database", "database");
-				fw.setValue(this.name + ".username", "username");
-				fw.setValue(this.name + ".password", "password");
-				
-				fw.save();
-				
-				Bukkit.getConsoleSender().sendMessage(ChatColor.WHITE + "[" + ChatColor.RED + KevReCraftAPI.getInstance().getName() + ChatColor.WHITE + "]" + " MySQL Error! Config File not found!");
-			}
-		}
-		
+	public MySQL(MySQLType type) {
+		this.type = type;
 	}
 	
 	public Connection getConnection() {
-		return getConnectionsHashMap().get(this.id);
+		return connections.get(this.type);
 	}
 	
-	public int getID() {
-		return this.id;
+	public MySQLType getType() {
+		return this.type;
 	}
 	
 	public String getName() {
-		return this.name;
+		return this.type.getName();
 	}
 	
 	public boolean isConnected() {
-		return getConnectionsHashMap().get(this.id) == null ? false : true;
+		return connections.get(this.type) == null ? false : true;
 	}
 	
-	public void disconnect() {
-		try {
-			if(getConnectionsHashMap().containsKey(this.id)) {
-				getConnectionsHashMap().get(this.id).close();
-				Bukkit.getConsoleSender().sendMessage(ChatColor.WHITE + "[" + ChatColor.RED + KevReCraftAPI.getInstance().getName() + ChatColor.WHITE + "]" + " MySQL disconnected!");
+	// STATIC ---------------------------------------------------------------------------------------------------
+	private static HashMap<MySQLType, Connection> connections = new HashMap<MySQLType, Connection>();
+	
+	private static FileWriter fw = new FileWriter("MySQL//","config");
+	
+	public static void load() {
+		if(!fw.exist()) {
+			Bukkit.getConsoleSender().sendMessage(ChatColor.WHITE + "[" + ChatColor.DARK_RED + KevReCraftAPI.getInstance().getName() + ChatColor.WHITE + "]" + " MySQL can't find Config File!");
+			for(MySQLType type : MySQLType.getAll()) {
+				fw.setValue(type.getName() + ".host", "localhost");
+				fw.setValue(type.getName() + ".port", "3306");
+				fw.setValue(type.getName() + ".database", "database");
+				fw.setValue(type.getName() + ".username", "username");		
+				fw.setValue(type.getName() + ".password", "password");
 			}
-		} catch (SQLException e) {
-			e.printStackTrace();
+			fw.save();
+			Bukkit.getConsoleSender().sendMessage(ChatColor.WHITE + "[" + ChatColor.DARK_GRAY + KevReCraftAPI.getInstance().getName() + ChatColor.WHITE + "]" + " MySQL created Config File!");
+			
+		} else {
+			for(MySQLType type : MySQLType.getAll()) {
+				String host = fw.getString(type.getName() + ".host");
+				String port = fw.getString(type.getName()  + ".port");
+				String database = fw.getString(type.getName()  + ".database");
+				String username = fw.getString(type.getName()  + ".username");
+				String password = fw.getString(type.getName()  + ".password");
+				
+				try {
+					connections.put(type, DriverManager.getConnection("jdbc:mysql//" + host + ":" + port + "/" + database, username, password));
+				} catch (SQLException e) {
+					Bukkit.getConsoleSender().sendMessage(ChatColor.WHITE + "[" + ChatColor.DARK_RED + KevReCraftAPI.getInstance().getName() + ChatColor.WHITE + "]" + " MySQL Error! Can't connect to " + type.getName() + " Server!");
+				}
+			}
+			
+			
 		}
 	}
 	
-	
+	public static void unload() {
+		for (MySQLType type : MySQLType.getAll()) {
+			if(new MySQL(type).isConnected()) {
+				try {
+					new MySQL(type).getConnection().close();
+				} catch (SQLException e) {
+					Bukkit.getConsoleSender().sendMessage(ChatColor.WHITE + "[" + ChatColor.DARK_RED + KevReCraftAPI.getInstance().getName() + ChatColor.WHITE + "]" + " MySQL Error! Can't close " + type.getName() + "'s Connection !");
+				}
+			}
+		}
+	}
 }
