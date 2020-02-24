@@ -22,7 +22,7 @@ public class Perm implements CommandExecutor {
 				if(args[0].equalsIgnoreCase("get")) {
 					if(Bukkit.getPlayer(args[1]) != null) {
 						Player target = Bukkit.getPlayer(args[1]); 
-						sender.sendMessage(Permissions.getString(target.getUniqueId()));
+						sender.sendMessage(Permissions.toString(target));
 						return true;
 					} else {
 						sender.sendMessage(ChatColor.RED + "Der Spieler " + args[1] + " konnte nicht gefunden werden!");
