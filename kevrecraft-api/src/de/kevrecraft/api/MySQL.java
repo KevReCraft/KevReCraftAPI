@@ -10,40 +10,26 @@ import org.bukkit.ChatColor;
 import de.kevrecraft.KevReCraftAPI;
 
 public class MySQL {
-	private String host;
-	private String port;
-	private String database;
-	private String username;
-	private String password;
+	// Variablen ----------------------------------------------------------
 	private Connection con;
 	
-	
+	// Methoden -----------------------------------------------------------
 	public MySQL(String host, String port, String database, String username, String password) {
-		this.host = host;
-		this.port = port;
-		this.database = database;
-		this.username = username;
-		this.password = password;
+		try {
+			con = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + database, username, password);
+			Bukkit.getConsoleSender().sendMessage(ChatColor.WHITE + "[" + ChatColor.GRAY + KevReCraftAPI.getInstance().getName() + ChatColor.WHITE + "]" + ChatColor.GREEN + " MySQL" + ChatColor.WHITE +" connected to " + database + "!");
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public MySQL(MySQLConfigFile config) {
-		this.host = config.getHost();
-		this.port = config.getPort();
-		this.database = config.getDatabase();
-		this.username = config.getUsername();
-		this.password = config.getPassword();
-	}
-	
-	public void connect() {
-		if(!isConnected()) {
-			try {
-				con = DriverManager.getConnection("jdbc:mysql://" + this.host + ":" + this.port + "/" + this.database, this.username, this.password);
-				Bukkit.getConsoleSender().sendMessage(ChatColor.WHITE + "[" + ChatColor.GRAY + KevReCraftAPI.getInstance().getName() + ChatColor.WHITE + "]" + ChatColor.GREEN + " MySQL" + ChatColor.WHITE +" connected to " + this.database + "!");
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+		try {
+			con = DriverManager.getConnection("jdbc:mysql://" + config.getHost() + ":" + config.getPort() + "/" + config.getDatabase(), config.getUsername(), config.getPassword());
+			Bukkit.getConsoleSender().sendMessage(ChatColor.WHITE + "[" + ChatColor.GRAY + KevReCraftAPI.getInstance().getName() + ChatColor.WHITE + "]" + ChatColor.GREEN + " MySQL" + ChatColor.WHITE +" connected to " + config.getDatabase() + "!");
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
-		
 	}
 	
 	public void disconnect() {
