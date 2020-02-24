@@ -15,19 +15,3 @@
      description: Shows you all about Permissions.
      permission: perm.admin
      usage: Syntax error! Simply type /&lt;command&gt; to show Help.
- 
- permissions:
-   help.*:
-     description: Gives access to all help commands
-     children:
-       help.default: true
-       help.adin: true
-   help.default:
-     description: Show all default Commands
-     default: true
-   help.admin:
-     description: Show all Admin Commands
-     default: false
-   permissions.admin:
-     description: Show all Permissions Commands
-     default: false
