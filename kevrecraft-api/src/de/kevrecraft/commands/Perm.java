@@ -76,6 +76,7 @@ public class Perm implements CommandExecutor {
 						}
 						
 					}
+				}
 			} else {
 				sender.sendMessage(ChatColor.RED + "Das darfst du nicht tun!");
 				return true;
@@ -103,7 +104,7 @@ public class Perm implements CommandExecutor {
 					}
 				}
 			}
-			}
+			
 			if(args.length == 3) {
 				if(args[0].equalsIgnoreCase("add")) {
 					if(Bukkit.getPlayer(args[1]) != null) {

@@ -9,9 +9,7 @@
  commands:
    help:
      description: Shows you all about API Commands.
-     permission: help.default
      usage: Syntax error! Simply type /&lt;command&gt; to show Help.
    perm:
      description: Shows you all about Permissions.
-     permission: perm.admin
      usage: Syntax error! Simply type /&lt;command&gt; to show Help.
