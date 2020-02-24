@@ -70,7 +70,7 @@ public class Permissions implements Listener {
 		return permissions.get(uuid);
 	}
 	
-	public static String getString(UUID uuid) {
+	public static String toString(UUID uuid) {
 		String list = "";
 		for(int i = getList(uuid).size() - 1; i >= 0; i--) {
 			if(i == 0) {
@@ -93,11 +93,15 @@ public class Permissions implements Listener {
 	// Variablen
 	private static MySQL mySQL;
 	
-	// Methode
-	public static void connect() {
+	// Methoden
+	private static MySQLConfigFile getPermissionMySQLConfigFile() {
 		MySQLConfigFile config = new MySQLConfigFile("permissions");
 		config.createValuesIfNotExist();
-		mySQL = new MySQL(config);
+		return config;
+	}
+	
+	public static void connect() {
+		mySQL = new MySQL(getPermissionMySQLConfigFile());
 		try {
 			PreparedStatement ps = mySQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player (UUID VARCHAR(100), Permissions TEXT(65535))");
 			ps.executeUpdate();
@@ -134,7 +138,7 @@ public class Permissions implements Listener {
 			try {
 				PreparedStatement ps = mySQL.getConnection().prepareStatement("UPDATE Player SET Permissions = ? WHERE UUID = ?");
 				
-				ps.setString(1, getString(uuid));
+				ps.setString(1, toString(uuid));
 				ps.setString(2, uuid.toString());
 				ps.executeUpdate();
 			} catch (SQLException e) {
