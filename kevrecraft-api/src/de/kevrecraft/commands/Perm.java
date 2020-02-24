@@ -23,16 +23,20 @@ public class Perm implements CommandExecutor {
 					if(Bukkit.getPlayer(args[1]) != null) {
 						Player target = Bukkit.getPlayer(args[1]); 
 						sender.sendMessage(Permissions.getString(target.getUniqueId()));
+						return true;
 					} else {
 						sender.sendMessage(ChatColor.RED + "Der Spieler " + args[1] + " konnte nicht gefunden werden!");
+						return true;
 					}
 				} else if(args[0].equalsIgnoreCase("remove")) {
 					if(Bukkit.getPlayer(args[1]) != null) {
 						Player target = Bukkit.getPlayer(args[1]); 
 						Permissions.removeAll(target.getUniqueId());
 						sender.sendMessage("Permissions von " + target.getName() + " gelöscht!");
+						return true;
 					} else {
 						sender.sendMessage(ChatColor.RED + "Der Spieler " + args[1] + " konnte nicht gefunden werden!");
+						return true;
 					}
 				}
 			}
@@ -42,8 +46,10 @@ public class Perm implements CommandExecutor {
 						Player target = Bukkit.getPlayer(args[1]); 
 						de.kevrecraft.api.Permissions.add(target.getUniqueId(), args[2]);
 						sender.sendMessage(ChatColor.GRAY + "Der Spieler " + target.getName() + " hatt nun die Permission " + args[2]);
+						return true;
 					} else {
 						sender.sendMessage(ChatColor.RED + "Der Spieler " + args[1] + " konnte nicht gefunden werden!");
+						return true;
 					}
 					
 				} else if(args[0].equalsIgnoreCase("get")) {
@@ -54,8 +60,10 @@ public class Perm implements CommandExecutor {
 						} else {
 							sender.sendMessage(ChatColor.GRAY + "Der Spieler " + target.getName() + " hat die Permission " + args[2] + " nicht!");
 						}
+						return true;
 					} else {
 						sender.sendMessage(ChatColor.RED + "Der Spieler " + args[1] + " konnte nicht gefunden werden!");
+						return true;
 					}
 					
 				} else if(args[0].equalsIgnoreCase("remove")) {
@@ -63,8 +71,10 @@ public class Perm implements CommandExecutor {
 						Player target = Bukkit.getPlayer(args[1]); 
 						de.kevrecraft.api.Permissions.remove(target.getUniqueId(), args[2]);
 						sender.sendMessage(ChatColor.GRAY + "Der Spieler " + target.getName() + " hat die Permission " + args[2] + " nicht mehr!");
+						return true;
 					} else {
 						sender.sendMessage(ChatColor.RED + "Der Spieler " + args[1] + " konnte nicht gefunden werden!");
+						return true;
 					}
 					
 				}
