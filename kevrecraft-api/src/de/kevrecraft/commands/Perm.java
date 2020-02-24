@@ -15,9 +15,72 @@ public class Perm implements CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		
 		if(sender instanceof Player) {
-			sender.sendMessage(ChatColor.RED + "Das darfst du nicht tun!");
+			if(Permissions.has((Player)sender, "perm.*")) {
+				if(args.length == 2) {
+					if(args[0].equalsIgnoreCase("get")) {
+						if(Bukkit.getPlayer(args[1]) != null) {
+							Player target = Bukkit.getPlayer(args[1]); 
+							sender.sendMessage(Permissions.toString(target));
+							return true;
+						} else {
+							sender.sendMessage(ChatColor.RED + "Der Spieler " + args[1] + " konnte nicht gefunden werden!");
+							return true;
+						}
+					} else if(args[0].equalsIgnoreCase("remove")) {
+						if(Bukkit.getPlayer(args[1]) != null) {
+							Player target = Bukkit.getPlayer(args[1]); 
+							Permissions.removeAll(target.getUniqueId());
+							sender.sendMessage("Permissions von " + target.getName() + " gelöscht!");
+							return true;
+						} else {
+							sender.sendMessage(ChatColor.RED + "Der Spieler " + args[1] + " konnte nicht gefunden werden!");
+							return true;
+						}
+					}
+				}
+				if(args.length == 3) {
+					if(args[0].equalsIgnoreCase("add")) {
+						if(Bukkit.getPlayer(args[1]) != null) {
+							Player target = Bukkit.getPlayer(args[1]); 
+							de.kevrecraft.api.Permissions.add(target.getUniqueId(), args[2]);
+							sender.sendMessage(ChatColor.GRAY + "Der Spieler " + target.getName() + " hatt nun die Permission " + args[2]);
+							return true;
+						} else {
+							sender.sendMessage(ChatColor.RED + "Der Spieler " + args[1] + " konnte nicht gefunden werden!");
+							return true;
+						}
+						
+					} else if(args[0].equalsIgnoreCase("has")) {
+						if(Bukkit.getPlayer(args[1]) != null) {
+							Player target = Bukkit.getPlayer(args[1]); 
+							if(de.kevrecraft.api.Permissions.has(target.getUniqueId(), args[2])) {
+								sender.sendMessage(ChatColor.GRAY + "Der Spieler " + target.getName() + " hat die Permission " + args[2] + "!");
+							} else {
+								sender.sendMessage(ChatColor.GRAY + "Der Spieler " + target.getName() + " hat die Permission " + args[2] + " nicht!");
+							}
+							return true;
+						} else {
+							sender.sendMessage(ChatColor.RED + "Der Spieler " + args[1] + " konnte nicht gefunden werden!");
+							return true;
+						}
+						
+					} else if(args[0].equalsIgnoreCase("remove")) {
+						if(Bukkit.getPlayer(args[1]) != null) {
+							Player target = Bukkit.getPlayer(args[1]); 
+							de.kevrecraft.api.Permissions.remove(target.getUniqueId(), args[2]);
+							sender.sendMessage(ChatColor.GRAY + "Der Spieler " + target.getName() + " hat die Permission " + args[2] + " nicht mehr!");
+							return true;
+						} else {
+							sender.sendMessage(ChatColor.RED + "Der Spieler " + args[1] + " konnte nicht gefunden werden!");
+							return true;
+						}
+						
+					}
+			} else {
+				sender.sendMessage(ChatColor.RED + "Das darfst du nicht tun!");
+				return true;
+			}
 		} else if(sender instanceof ConsoleCommandSender) {
-			// /permissions add/get/remove player [permission]
 			if(args.length == 2) {
 				if(args[0].equalsIgnoreCase("get")) {
 					if(Bukkit.getPlayer(args[1]) != null) {
@@ -40,6 +103,7 @@ public class Perm implements CommandExecutor {
 					}
 				}
 			}
+			}
 			if(args.length == 3) {
 				if(args[0].equalsIgnoreCase("add")) {
 					if(Bukkit.getPlayer(args[1]) != null) {
@@ -52,7 +116,7 @@ public class Perm implements CommandExecutor {
 						return true;
 					}
 					
-				} else if(args[0].equalsIgnoreCase("get")) {
+				} else if(args[0].equalsIgnoreCase("has")) {
 					if(Bukkit.getPlayer(args[1]) != null) {
 						Player target = Bukkit.getPlayer(args[1]); 
 						if(de.kevrecraft.api.Permissions.has(target.getUniqueId(), args[2])) {

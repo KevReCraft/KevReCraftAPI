@@ -4,7 +4,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 import de.kevrecraft.api.Permissions;
@@ -14,23 +13,28 @@ public class Help implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
 		if(sender instanceof Player) {
-			Player player = (Player) sender;
+			Player p = (Player) sender;
 			
-			player.sendMessage(ChatColor.GREEN + "KevReCraftAPI");
+			p.sendMessage(ChatColor.BOLD + "" + ChatColor.GREEN + "Hilfe für Kommandos");
 			
-			if(Permissions.has(player.getUniqueId(), "help.*") || Permissions.has(player.getUniqueId(), "help.admin")) {
-				player.sendMessage("HELP -> ADMIN");
+			if(args.length == 0) {
+				if(Permissions.has(p, "perm.help") || Permissions.has(p, "perm.*")) {
+					sender.sendMessage(ChatColor.GRAY + "/help perm" + ChatColor.WHITE + " -> " + ChatColor.DARK_GRAY + "für mehr Kommando-hilfe " + ChatColor.GRAY +"/perm" + ChatColor.DARK_GRAY + "!");
+				}
+				return true;
+			} else if(args.length == 1){
+				if(Permissions.has(p, "perm.help") || Permissions.has(p, "perm.*"))
+					if(args[0].equalsIgnoreCase("perm")) {
+						sender.sendMessage(ChatColor.GRAY + "/perm get [Player]" + ChatColor.WHITE + " -> " + ChatColor.DARK_GREEN + "Listet dir alle Permissions eines Spielers!");
+						sender.sendMessage(ChatColor.GRAY + "/perm remove [Player]" + ChatColor.WHITE + " -> " + ChatColor.DARK_GREEN + "Löscht alle Permissions eines Spielers!");
+						sender.sendMessage(ChatColor.GRAY + "/perm has [Player] [Permission]" + ChatColor.WHITE + " -> " + ChatColor.DARK_GREEN + "Sagt dir ob ein Spieler eine bestimmte Permission hat!");
+						sender.sendMessage(ChatColor.GRAY + "/perm add [Player] [Permission]" + ChatColor.WHITE + " -> " + ChatColor.DARK_GREEN + "Gieb einem Spieler eine bestimmte Permission!");
+						sender.sendMessage(ChatColor.GRAY + "/perm remove [Player] [Permission]" + ChatColor.WHITE + " -> " + ChatColor.DARK_GREEN + "Losche eine bestimmte Permissions eines Spielers!");
+					}
 			}
-			return true;
-		} else if(sender instanceof ConsoleCommandSender) {
-			ConsoleCommandSender console = (ConsoleCommandSender) sender;
-			
-			console.sendMessage(ChatColor.GREEN + "KevReCraftAPI");
+			p.sendMessage(ChatColor.DARK_GRAY + "Wrong Syntax: " + ChatColor.GRAY + "/help" + ChatColor.DARK_GRAY + " for more help!");
 			return true;
 		}
-		
-		
 		return false;
 	}
-
 }
