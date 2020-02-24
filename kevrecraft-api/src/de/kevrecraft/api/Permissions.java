@@ -27,7 +27,7 @@ public class Permissions implements Listener {
 	}
 	
 	public static boolean exist(Player p) {
-		return permissions.containsKey(p.getUniqueId());
+		return exist(p.getUniqueId());
 	}
 	
 	public static void add(UUID uuid, String permission) {
@@ -40,12 +40,7 @@ public class Permissions implements Listener {
 	}
 	
 	public static void add(Player p, String permission) {
-		ArrayList<String> perm = getList(p.getUniqueId());
-		if(perm == null) {
-			perm = new ArrayList<String>();
-		}
-		perm.add(permission);
-		permissions.put(p.getUniqueId(), perm);
+		add(p.getUniqueId(), permission);
 	}
 	
 	public static void add(UUID uuid, ArrayList<String> permission) {
@@ -53,7 +48,7 @@ public class Permissions implements Listener {
 	}
 	
 	public static void add(Player p, ArrayList<String> permission) {
-		permissions.put(p.getUniqueId(), permission);
+		add(p.getUniqueId(), permission);
 	}
 	
 	public static void remove(UUID uuid, String permission) {
@@ -67,13 +62,7 @@ public class Permissions implements Listener {
 	}
 	
 	public static void remove(Player p, String permission) {
-		if(exist(p.getUniqueId())) {
-			for(int i = 0; i<permissions.get(p.getUniqueId()).size(); i++) {
-				if(permissions.get(p.getUniqueId()).get(i).equalsIgnoreCase(permission)) {
-					permissions.get(p.getUniqueId()).remove(i);
-				}
-			}
-		}
+		remove(p.getUniqueId(), permission);
 	}
 	
 	public static void removeAll(UUID uuid) {
@@ -83,9 +72,7 @@ public class Permissions implements Listener {
 	}
 	
 	public static void removeAll(Player p) {
-		if(exist(p.getUniqueId())) {
-			permissions.get(p.getUniqueId()).clear();
-		}
+		removeAll(p.getUniqueId());
 	}
 	
 	public static void delete(UUID uuid) {
@@ -97,11 +84,7 @@ public class Permissions implements Listener {
 	}
 	
 	public static void delete(Player p) {
-		if(exist(p.getUniqueId())) {
-			permissions.remove(p.getUniqueId());
-		}
-		
-		deleteMySQL(p.getUniqueId());
+		delete(p.getUniqueId());
 	}
 	
 	public static ArrayList<String> getList(UUID uuid) {
@@ -109,7 +92,7 @@ public class Permissions implements Listener {
 	}
 	
 	public static ArrayList<String> getList(Player p) {
-		return permissions.get(p.getUniqueId());
+		return getList(p.getUniqueId());
 	}
 	
 	public static String toString(UUID uuid) {
@@ -125,15 +108,7 @@ public class Permissions implements Listener {
 	}
 	
 	public static String toString(Player p) {
-		String list = "";
-		for(int i = getList(p.getUniqueId()).size() - 1; i >= 0; i--) {
-			if(i == 0) {
-				list += getList(p.getUniqueId()).get(i);
-			} else {
-				list += getList(p.getUniqueId()).get(i) + ", ";
-			}
-		}
-		return list;
+		return toString(p.getUniqueId());
 	}
 	
 	public static boolean has(UUID uuid, String permission) {
@@ -144,10 +119,7 @@ public class Permissions implements Listener {
 	}
 	
 	public static boolean has(Player p, String permission) {
-		if(exist(p.getUniqueId())) {
-			return permissions.get(p.getUniqueId()).contains(permission);
-		}
-		return false;
+		return has(p.getUniqueId(), permission);
 	}
 	
 	// MySQL Stuff ----------------------------------------------------------------------------------------
