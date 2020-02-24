@@ -10,7 +10,6 @@ import org.bukkit.ChatColor;
 import de.kevrecraft.KevReCraftAPI;
 
 public class MySQL {
-	
 	private String host;
 	private String port;
 	private String database;
@@ -18,7 +17,6 @@ public class MySQL {
 	private String password;
 	private Connection con;
 	
-	private static FileWriter fw = new FileWriter("MySQL//", "config");
 	
 	public MySQL(String host, String port, String database, String username, String password) {
 		this.host = host;
@@ -26,6 +24,14 @@ public class MySQL {
 		this.database = database;
 		this.username = username;
 		this.password = password;
+	}
+	
+	public MySQL(MySQLConfigFile config) {
+		this.host = config.getHost();
+		this.port = config.getPort();
+		this.database = config.getDatabase();
+		this.username = config.getUsername();
+		this.password = config.getPassword();
 	}
 	
 	public void connect() {
@@ -54,9 +60,5 @@ public class MySQL {
 	
 	public boolean isConnected() {
 		return (con == null ? false : true);
-	}
-	
-	public static FileWriter getFileWriter() {
-		return fw;
 	}
 }
