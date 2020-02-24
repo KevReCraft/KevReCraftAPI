@@ -107,13 +107,19 @@ public class Permissions implements Listener {
 	}
 	
 	// Config File Stuff --------------------------------------------------------------------------------
+	private static String host = "permissions.host";
+	private static String port = "permissions.port";
+	private static String database = "permissions.database";
+	private static String username = "permissions.username";
+	private static String password = "permissions.password";
+	
 	private static void createConfig() {
-		if(MySQL.getFileWriter().getString("permissions.host") == null || MySQL.getFileWriter().getString("permissions.host") == "") {
-			MySQL.getFileWriter().setValue("permissions.host", "localhost");
-			MySQL.getFileWriter().setValue("permissions.port", "3306");
-			MySQL.getFileWriter().setValue("permissions.database", "database");
-			MySQL.getFileWriter().setValue("permissions.username", "username");
-			MySQL.getFileWriter().setValue("permissions.password", "password");
+		if(MySQL.getFileWriter().getString(host) == null || MySQL.getFileWriter().getString("permissions.host") == "") {
+			MySQL.getFileWriter().setValue(host, "localhost");
+			MySQL.getFileWriter().setValue(port, "3306");
+			MySQL.getFileWriter().setValue(database, "database");
+			MySQL.getFileWriter().setValue(username, "username");
+			MySQL.getFileWriter().setValue(password, "password");
 			
 			MySQL.getFileWriter().save();
 		}
@@ -122,11 +128,11 @@ public class Permissions implements Listener {
 	// MySQL Stuff ----------------------------------------------------------------------------------------
 	public static void connect() {
 		createConfig();
-		mySQL = new MySQL(MySQL.getFileWriter().getString("permissions.host"), 
-				MySQL.getFileWriter().getString("permissions.port"), 
-				MySQL.getFileWriter().getString("permissions.database"), 
-				MySQL.getFileWriter().getString("permissions.username"), 
-				MySQL.getFileWriter().getString("permissions.password"));
+		mySQL = new MySQL(MySQL.getFileWriter().getString(host), 
+				MySQL.getFileWriter().getString(port), 
+				MySQL.getFileWriter().getString(database), 
+				MySQL.getFileWriter().getString(username), 
+				MySQL.getFileWriter().getString(password));
 		mySQL.connect();
 		try {
 			PreparedStatement ps = mySQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player (UUID VARCHAR(100), Permissions TEXT(65535))");
