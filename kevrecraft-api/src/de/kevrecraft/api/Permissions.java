@@ -18,27 +18,10 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import de.kevrecraft.KevReCraftAPI;
 
 public class Permissions implements Listener {
-	
-	@EventHandler
-	public void onPlayerLogin(PlayerLoginEvent e) {
-		Player p = e.getPlayer();
-		if(exist(p.getUniqueId())) {
-			permissions.remove(p.getUniqueId());
-		}
-		add(p.getUniqueId(), getPermissionsFromMySQL(p.getUniqueId()));
-	}
-	
-	@EventHandler
-	public void onPlayerQuit(PlayerQuitEvent e) {
-		Player p = e.getPlayer();
-		updateMySQL(p.getUniqueId(), getList(p.getUniqueId()));
-	}
-	
-	private static MySQL mySQL;
-	
+	// Variablen
 	private static HashMap<UUID, ArrayList<String>> permissions = new HashMap<UUID, ArrayList<String>>();
 		
-	
+	// Methoden
 	public static boolean exist(UUID uuid) {
 		return permissions.containsKey(uuid);
 	}
@@ -107,11 +90,14 @@ public class Permissions implements Listener {
 	}
 	
 	// MySQL Stuff ----------------------------------------------------------------------------------------
+	// Variablen
+	private static MySQL mySQL;
+	
+	// Methode
 	public static void connect() {
 		MySQLConfigFile config = new MySQLConfigFile("permissions");
 		config.createValuesIfNotExist();
 		mySQL = new MySQL(config);
-		mySQL.connect();
 		try {
 			PreparedStatement ps = mySQL.getConnection().prepareStatement("CREATE TABLE IF NOT EXISTS Player (UUID VARCHAR(100), Permissions TEXT(65535))");
 			ps.executeUpdate();
@@ -123,7 +109,7 @@ public class Permissions implements Listener {
 			if(exist(p.getUniqueId())) {
 				permissions.remove(p.getUniqueId());
 			}
-			add(p.getUniqueId(), getPermissionsFromMySQL(p.getUniqueId()));
+			add(p.getUniqueId(), getAllFromMySQL(p.getUniqueId()));
 		}
 	}
 	
@@ -178,7 +164,7 @@ public class Permissions implements Listener {
 		}
 	}
 	
-	private static ArrayList<String> getPermissionsFromMySQL(UUID uuid) {
+	private static ArrayList<String> getAllFromMySQL(UUID uuid) {
 		try {
 			PreparedStatement ps = mySQL.getConnection().prepareStatement("SELECT Permissions FROM Player WHERE UUID = ?");
 			ps.setString(1, uuid.toString());
@@ -197,4 +183,20 @@ public class Permissions implements Listener {
 		}
 		return new ArrayList<String>();
 	}
+	
+	// Events ---------------------------------------------------------------------------------------------
+		@EventHandler
+		public void onPlayerLogin(PlayerLoginEvent e) {
+			Player p = e.getPlayer();
+			if(exist(p.getUniqueId())) {
+				permissions.remove(p.getUniqueId());
+			}
+			add(p.getUniqueId(), getAllFromMySQL(p.getUniqueId()));
+		}
+		
+		@EventHandler
+		public void onPlayerQuit(PlayerQuitEvent e) {
+			Player p = e.getPlayer();
+			updateMySQL(p.getUniqueId(), getList(p.getUniqueId()));
+		}
 }
