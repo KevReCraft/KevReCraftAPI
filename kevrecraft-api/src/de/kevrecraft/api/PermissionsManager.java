@@ -16,8 +16,10 @@ import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import de.kevrecraft.KevReCraftAPI;
+import de.kevrecraft.api.classes.MySQL;
+import de.kevrecraft.api.classes.MySQLConfigFile;
 
-public class Permissions implements Listener {
+public class PermissionsManager implements Listener {
 	// Variablen
 	private static HashMap<UUID, ArrayList<String>> permissions = new HashMap<UUID, ArrayList<String>>();
 		

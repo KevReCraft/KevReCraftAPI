@@ -1,4 +1,4 @@
-package de.kevrecraft.api;
+package de.kevrecraft.api.classes;
 
 public class MySQLConfigFile {
 	private static FileWriter fw = new FileWriter("MySQL//", "config");

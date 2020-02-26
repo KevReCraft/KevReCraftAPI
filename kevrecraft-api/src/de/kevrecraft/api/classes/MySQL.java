@@ -1,4 +1,4 @@
-package de.kevrecraft.api;
+package de.kevrecraft.api.classes;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

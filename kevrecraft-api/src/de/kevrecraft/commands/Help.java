@@ -1,12 +1,14 @@
 package de.kevrecraft.commands;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import de.kevrecraft.api.Permissions;
+import de.kevrecraft.api.PermissionsManager;
+import de.kevrecraft.api.classes.BlockArea;
 
 public class Help implements CommandExecutor {
 
@@ -18,12 +20,12 @@ public class Help implements CommandExecutor {
 			p.sendMessage(ChatColor.GREEN + "" + ChatColor.BOLD + "Hilfe für Kommandos");
 			
 			if(args.length == 0) {
-				if(Permissions.has(p, "perm.help") || Permissions.has(p, "perm.*")) {
+				if(PermissionsManager.has(p, "perm.help") || PermissionsManager.has(p, "perm.*")) {
 					sender.sendMessage(ChatColor.GRAY + "/help perm" + ChatColor.WHITE + " -> " + ChatColor.DARK_GRAY + "für mehr Permissions Hilfe!");
 				}
 				return true;
 			} else if(args.length == 1){
-				if(Permissions.has(p, "perm.help") || Permissions.has(p, "perm.*"))
+				if(PermissionsManager.has(p, "perm.help") || PermissionsManager.has(p, "perm.*"))
 					if(args[0].equalsIgnoreCase("perm")) {
 						sender.sendMessage(ChatColor.GRAY + "/perm get [Player]");
 						sender.sendMessage(ChatColor.DARK_GRAY + " -> Listet dir alle Permissions eines Spielers!");
